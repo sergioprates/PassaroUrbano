@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { OrdemCompraService } from '../ordem-compra.service'
 import { Pedido } from '../shared/pedido.model'
-import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-ordem-compra',
@@ -11,7 +11,17 @@ import { NgForm } from '@angular/forms';
 })
 export class OrdemCompraComponent implements OnInit {
 
-  @ViewChild('formulario') public formulario: NgForm;
+  public formulario: FormGroup = new FormGroup({
+    'endereco': new FormControl(null, [Validators.required, 
+      Validators.minLength(3),
+      Validators.maxLength(120)]),
+    'numero':new FormControl(null,[Validators.required, 
+      Validators.minLength(1),
+      Validators.maxLength(20)]),
+    'complemento':new FormControl(null),
+    'formaPagamento':new FormControl('',[Validators.required])
+  });
+
   public idPedidoCompra: number;
 
   constructor(private ordemCompraService: OrdemCompraService) { }
@@ -20,16 +30,37 @@ export class OrdemCompraComponent implements OnInit {
     
   }
 
-  public confirmarCompra(): void{
-    let pedido: Pedido = new Pedido(
-    this.formulario.value.endereco,
-    this.formulario.value.numero, 
-    this.formulario.value.complemento, 
-    this.formulario.value.formaPagamento);
-    this.ordemCompraService.efetivarCompra(pedido).subscribe((idPedido: number)=>
-    {
-      this.idPedidoCompra = idPedido;
-      console.log(idPedido);
+  public confirmarCompra(): void {
+    if (this.formulario.invalid == true) {
+      this.markFormGroupTouched(this.formulario);
+      console.log('Formulário inválido');
+    }
+    else{
+      console.log('Formulário válido');
+
+      let pedido: Pedido = new Pedido(
+        this.formulario.value.endereco,
+        this.formulario.value.numero,
+        this.formulario.value.complemento,
+        this.formulario.value.formaPagamento
+      );
+
+      this.ordemCompraService.efetivarCompra(pedido).subscribe(idPedido=>
+      {
+        this.idPedidoCompra = idPedido;
+        console.log('pedido');
+      })
+    }
+  }
+
+  private markFormGroupTouched(formGroup: FormGroup) {
+    (<any>Object).values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+
+      if (control.controls) {
+        control.controls.forEach(c => this.markFormGroupTouched(c));
+      }
     });
   }
+  
 }

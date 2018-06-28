@@ -187,6 +187,13 @@
       "complemento": "",
       "formaPagamento": "dinheiro",
       "id": 4
+    },
+    {
+      "endereco": "teste",
+      "numero": "2",
+      "complemento": null,
+      "formaPagamento": "dinheiro",
+      "id": 5
     }
   ]
 }

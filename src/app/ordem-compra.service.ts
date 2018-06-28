@@ -13,7 +13,7 @@ export class OrdemCompraService {
      */
     constructor(private http: Http) {}
 
-    public efetivarCompra(pedido: Pedido): Observable<any> {
+    public efetivarCompra(pedido: Pedido): Observable<number> {
         
         let headers: Headers = new Headers();
         headers.append('Content-type', 'application/json');
