@@ -6,6 +6,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { interval } from 'rxjs/observable/interval';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
+import {CarrinhoService} from '../carrinho.service';
 
 
 @Component({
@@ -16,14 +17,17 @@ import { Observer } from 'rxjs/Observer';
 })
 export class OfertaComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private ofertaService: OfertasService) { 
+  constructor(private route: ActivatedRoute, 
+    private ofertaService: OfertasService,
+    private carrinhoServico: CarrinhoService) { 
 
   }
 
   public oferta: Oferta;
 
   ngOnInit() {
-  
+  console.log("Oferta: ", this.carrinhoServico.exibirItens());
+
     this.route.params.subscribe((params: Params)=>
     {
       var id = params['id'];
@@ -35,9 +39,12 @@ export class OfertaComponent implements OnInit {
         console.log(ex);
       });
     });
-    
+  }
 
-  
+  public AdicionarItemCarrinho(oferta: Oferta): void{
+
+    this.carrinhoServico.incluirItem(oferta);
+
   }
 
 }

@@ -23,6 +23,8 @@ import { OrdemCompraComponent } from './ordem-compra/ordem-compra.component';
 import { OrdemCompraSucessoComponent } from './ordem-compra-sucesso/ordem-compra-sucesso.component';
 registerLocaleData(ptBr);
 
+import {CarrinhoService} from './carrinho.service';
+
 @NgModule({
   declarations: [
     //Components
@@ -49,7 +51,7 @@ registerLocaleData(ptBr);
     ReactiveFormsModule,
     RouterModule.forRoot(ROUTES)
   ],
-  providers: [{ provide: LOCALE_ID, useValue: 'pt-BR' }],
+  providers: [CarrinhoService, { provide: LOCALE_ID, useValue: 'pt-BR' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
